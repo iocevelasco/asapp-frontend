@@ -1,31 +1,21 @@
 {
-  "name": "asapp-challenge",
-  "version": "0.1.0",
-  "private": true,
+  "name": "challenge-workspace",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start-dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "test:dev": "jest --watch",
-    "test": "jest"
+    "build": "npm workspaces run build",
+    "serve": "wsrun --parallel serve",
+    "start-dev": "concurrently \"wsrun --parallel dev\""
   },
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.16.2",
-    "@testing-library/react": "^12.1.3",
-    "@types/jest": "^27.4.1",
-    "next": "12.1.0",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "styled-components": "^5.3.3"
-  },
+  "workspaces": [
+    "api",
+    "frontend"
+  ],
   "devDependencies": {
-    "@types/node": "^17.0.21",
-    "@types/react": "^17.0.39",
-    "@types/styled-components": "^5.1.24",
-    "babel-plugin-styled-components": "^2.0.6",
-    "eslint": "8.10.0",
-    "eslint-config-next": "12.1.0",
-    "typescript": "^4.6.2"
-  }
+    "concurrently": "^5.1.0",
+    "wsrun": "^5.2.0"
+  },
+  "author": "ioce-velasco",
+  "license": "ISC"
 }

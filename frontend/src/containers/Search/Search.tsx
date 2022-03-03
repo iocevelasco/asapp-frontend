@@ -1,54 +1,65 @@
 import styled from 'styled-components';
-import React, { useState } from 'react';
-import { Container } from '../../components/helpers/Container';
+import React, { useState, FC } from 'react';
 import { Typography } from 'antd';
 import { AutoComplete } from '../../components/AutoComplete/AutoComplete';
 import { Select, Spin } from 'antd';
+import classes from './Search.module.css';
+import { ICity } from '../../types/interface';
+
 const { Option } = Select;
 
 const { Title } = Typography;
 
-const SearchContainer = ({ cities }) => {
-  const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(0);
+export interface ISearchType {
+  cities: ICity[];
+}
+
+const SearchContainer: FC<ISearchType> = ({ cities }) => {
+  const [activeSuggestionIndex, setActiveSuggestionIndex] = useState<number>(0);
+  const [filteredSuggestions, setFilteredSuggestions] = useState<ICity[]>([]);
+  const [citiSelected, setCitiSelected] = useState<ICity>({});
 
   const [input, setInput] = useState('');
+  console.log('filteredSuggestions', filteredSuggestions);
 
-  console.log('cities', cities);
-
-  const handleChange = (event) => {
-    console.log(event);
-  };
-
-  const onChange = (e) => {
-    const userInput = e.target.value;
-
-    // Filter our suggestions that don't contain the user's input
-    const unLinked = suggestions.filter(
+  const onChange = (userInput: string) => {
+    setInput(userInput);
+    const unLinked = cities.filter(
       (suggestion) =>
-        suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1,
+        suggestion.country.toLowerCase().indexOf(input.toLowerCase()) > -1,
     );
-
-    setInput(e.target.value);
     setFilteredSuggestions(unLinked);
     setActiveSuggestionIndex(0);
-    setShowSuggestions(true);
   };
 
-  const onClick = (e) => {
+  const onClick = (e: ICity) => {
+    setCitiSelected(e);
+    setInput(e.country);
     setFilteredSuggestions([]);
-    setInput(e.target.innerText);
     setActiveSuggestionIndex(0);
-    setShowSuggestions(false);
   };
+
+  console.log('activeSuggestionIndex', activeSuggestionIndex);
+  //console.log('input', input);
   return (
-    <Container>
-      <p>title</p>
-      <AutoComplete
-        onClick={onClick}
-        suggestions={cities}
-        onChange={onChange}
-      />
-    </Container>
+    <div className={classes.container}>
+      <div className={classes.header}>
+        {citiSelected ? (
+          <p>Select your favorite city</p>
+        ) : (
+          <p>{citiSelected.country}</p>
+        )}
+      </div>
+      <div className={classes.input}>
+        <AutoComplete
+          onClick={onClick}
+          suggestions={filteredSuggestions}
+          onChange={onChange}
+          value={input}
+          placeholder="Select your city"
+        />
+      </div>
+    </div>
   );
 };
 

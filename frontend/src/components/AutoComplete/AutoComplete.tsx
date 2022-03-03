@@ -1,39 +1,65 @@
-import { useState } from 'react';
-import { StyledInput, Container, InputWrapper, SuggestionList } from './Styles';
+import { FC, useState, useEffect } from 'react';
+import {
+  StyledInput,
+  Container,
+  InputWrapper,
+  SuggestionList,
+  Dropdown,
+} from './Styles';
+import { ICity } from '../../types/interface';
 
-const AutoComplete = ({
+interface IAutocomplete {
+  placeholder?: string;
+  value: string;
+  onChange: (value: string) => void;
+  onClick: (value: ICity) => void;
+  suggestions: ICity[];
+  activeSuggestionIndex: ICity[];
+}
+
+const AutoComplete: FC<IAutocomplete> = ({
   suggestions,
-  onChange,
   onClick,
   activeSuggestionIndex,
+  onChange,
+  value,
+  placeholder,
 }) => {
-  const [filteredSuggestions, setFilteredSuggestions] = useState([]);
-  const [input, setInput] = useState('');
-  const [showSuggestions, setShowSuggestions] = useState(false);
+  // useEffect(() => {
+  //   if (suggestions.length) {
+  //     setShowSuggestions(true);
+  //   }
+  // }, [suggestions]);
 
-  const onHandlerchange = (e) => {
+  const onHandlerchange = (e: { target: { value: string } }) => {
     const userInput = e.target.value;
-    setInput(userInput);
     onChange(userInput);
-    setShowSuggestions(true);
   };
 
   const SuggestionsListComponent = () => {
-    return filteredSuggestions.length ? (
-      <SuggestionList>
-        {filteredSuggestions.map((suggestion, index) => {
-          let className;
-          // Flag the active suggestion with a class
-          if (index === activeSuggestionIndex) {
-            className = 'suggestion-active';
-          }
-          return (
-            <li className={className} key={suggestion} onClick={onClick}>
-              {suggestion}
-            </li>
-          );
-        })}
-      </SuggestionList>
+    return suggestions.length ? (
+      <Dropdown>
+        <SuggestionList>
+          {suggestions.map((suggestion, index) => {
+            let className;
+            // Flag the active suggestion with a class
+            if (index === activeSuggestionIndex) {
+              className = 'suggestion-active';
+            }
+            return (
+              <li
+                className={className}
+                key={index}
+                onClick={() => onClick(suggestion)}
+              >
+                {suggestion.country}
+                {suggestion.name}
+                {suggestion.substring}
+              </li>
+            );
+          })}
+        </SuggestionList>
+      </Dropdown>
     ) : (
       <div className="no-suggestions">
         <em>No suggestions, you're on your own!</em>
@@ -44,8 +70,13 @@ const AutoComplete = ({
   return (
     <Container>
       <InputWrapper>
-        <StyledInput type="text" onChange={onHandlerchange} value={input} />
-        {showSuggestions && input && <SuggestionsListComponent />}
+        <StyledInput
+          type="text"
+          placeholder={placeholder}
+          onChange={onHandlerchange}
+          value={value}
+        />
+        {value && <SuggestionsListComponent />}
       </InputWrapper>
     </Container>
   );

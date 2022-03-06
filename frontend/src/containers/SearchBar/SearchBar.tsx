@@ -1,44 +1,20 @@
-import React, { useState, FC, useEffect } from 'react';
-import { Typography } from 'antd';
+import React, { Dispatch, SetStateAction, useState, FC } from 'react';
 import { AutoComplete } from '../../components/AutoComplete/AutoComplete';
 import classes from './SearchBar.module.css';
 import lodash from 'lodash';
 import { ICity } from '../../types/interface';
-import { mapPreferences } from './utils';
-import {
-  fetchCities,
-  addToPreferenceUser,
-  fetchPreferencesCities,
-} from '../../../services/cities';
-
-const { Text } = Typography;
+import { fetchCities, addToPreferenceUser } from '../../../services/cities';
 
 export interface ISearchType {
-  cities: ICity[];
+  setCitiSelected: Dispatch<SetStateAction<ICity>>;
+  preferences: number[];
 }
 
-const SearchBar: FC = ({ setCitiSelected }) => {
+const SearchBar: FC<ISearchType> = ({ setCitiSelected, preferences }) => {
   const [query, setQuery] = useState<string>('');
-  const [searchQuery, setSearchQuery] = useState({});
-
   const [suggestions, setSuggestion] = useState<ICity[]>([]);
-  const [preferences, setPreferences] = useState<ICity[]>([]);
-
   const [loading, setLoading] = useState<boolean>(false);
-
-  console.log('query', query);
-  console.log('loading', loading);
-
-  useEffect(() => {
-    getPreferences();
-  }, []);
-
-  const getPreferences = async () => {
-    const { result } = await fetchPreferencesCities();
-    if (result) setPreferences(result.data);
-    else setPreferences([]);
-  };
-
+  const [searchQuery, setSearchQuery] = useState({});
   const onChange = (value: string) => {
     setQuery(value);
     const search = lodash.debounce(sendQuery, 500);
@@ -50,7 +26,7 @@ const SearchBar: FC = ({ setCitiSelected }) => {
       return search;
     });
 
-    if (value) {
+    if (search) {
       search(value);
     } else {
       setSuggestion([]);
@@ -60,7 +36,6 @@ const SearchBar: FC = ({ setCitiSelected }) => {
   const sendQuery = async () => {
     setLoading(true);
     const { result } = await fetchCities(query);
-    console.log('result', result);
     if (result) {
       setSuggestion(result.data);
       setLoading(false);
@@ -70,13 +45,20 @@ const SearchBar: FC = ({ setCitiSelected }) => {
     }
   };
 
-  const onClick = async (e, value: ICity) => {
-    setCitiSelected(e);
-    setQuery(e.name);
-    const { result } = await addToPreferenceUser(e.geonameid, value);
+  const onClick = async (itemSelected, checked: ICity) => {
+    setCitiSelected(itemSelected);
+    setQuery(itemSelected.name);
+    await addToPreferenceUser(itemSelected.geonameid, checked);
 
-    setSuggestion(updateSelected);
-    // await getPreferences();
+    const updatesuggestion = suggestions.map((suggestion) => {
+      const isSelected = preferences.find((e) => e == itemSelected.geonameid);
+      return {
+        ...suggestion,
+        isSelected,
+      };
+    });
+
+    setSuggestion(updatesuggestion);
   };
 
   return (
@@ -89,6 +71,7 @@ const SearchBar: FC = ({ setCitiSelected }) => {
           value={query}
           loading={loading}
           placeholder="Select your city"
+          preferences={preferences}
         />
       </div>
     </div>

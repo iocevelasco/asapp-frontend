@@ -24,6 +24,7 @@ const AutoComplete: FC<IAutocomplete> = ({
   onChange,
   value,
   placeholder,
+  preferences,
 }) => {
   const EmptyMessage = () => {
     if (!value && suggestions.length) {
@@ -32,8 +33,7 @@ const AutoComplete: FC<IAutocomplete> = ({
       return null;
     }
   };
-  console.log('suggestions', suggestions);
-  console.log('loading', loading);
+
   return (
     <Container>
       <InputWrapper>
@@ -49,9 +49,9 @@ const AutoComplete: FC<IAutocomplete> = ({
         </SpinWrapper>
         {value && (
           <SuggestionsList
+            preferences={preferences}
             suggestions={suggestions}
             onClick={onClick}
-            loading={loading}
             value={value}
           />
         )}

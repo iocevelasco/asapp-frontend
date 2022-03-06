@@ -5,7 +5,8 @@ import { ListItem } from './ListItem';
 
 interface ISuggestionsList {
   suggestions: ICity[];
-  onClick: (suggestion, isCheckbox) => {};
+  preferences: number[];
+  onClick: () => void;
   value: string;
 }
 
@@ -13,6 +14,7 @@ const SuggestionsList: FC<ISuggestionsList> = ({
   suggestions,
   onClick,
   value,
+  preferences,
 }) => {
   if (!suggestions.length) return null;
 
@@ -20,6 +22,7 @@ const SuggestionsList: FC<ISuggestionsList> = ({
     <Dropdown>
       <SuggestionList>
         {suggestions.map((suggestion, index) => {
+          const isSelected = preferences.find((e) => e == suggestion.geonameid);
           return (
             <ListItem
               onClick={onClick}
@@ -27,6 +30,7 @@ const SuggestionsList: FC<ISuggestionsList> = ({
               index={index}
               item={suggestion}
               currentValue={value}
+              isSelected={isSelected}
             />
           );
         })}

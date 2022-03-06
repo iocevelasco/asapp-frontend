@@ -2,16 +2,21 @@ import React, { useState } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import classes from '../styles/Home.module.css';
-import { Typography, Card } from 'antd';
+import { Typography, Card, Space } from 'antd';
 import { ICity } from '../src/types/interface';
-
 const { Text } = Typography;
 //containers
-import SearchBar from 'Containers/SearchBar';
+import SearchBar from '../src/containers/SearchBar';
+import { usePreferences } from '../src/hooks/usePreference';
 
 const Home: NextPage = () => {
-  const [citiSelected, setCitiSelected] = useState<ICity>({});
-  console.log('citiSelected', citiSelected);
+  const [citiSelected, setCitiSelected] = useState<ICity>({
+    geonameid: null,
+    name: '',
+    country: '',
+    subcountry: '',
+  });
+  const { preferences } = usePreferences(citiSelected);
   return (
     <div className={classes.container}>
       <Head>
@@ -22,13 +27,24 @@ const Home: NextPage = () => {
       <Card>
         <div className={classes.header}>
           <Text type="secondary">Select your favorite city</Text>
-          {citiSelected.name && (
-            <Text>
-              City:{citiSelected.name} - Country: {citiSelected.country}
-            </Text>
-          )}
+          <div>
+            {citiSelected.geonameid && (
+              <Space>
+                <Text>
+                  City:<Text strong>{citiSelected.name}</Text>
+                </Text>
+                -
+                <Text>
+                  Country: <Text strong>{citiSelected.country}</Text>
+                </Text>
+              </Space>
+            )}
+          </div>
         </div>
-        <SearchBar setCitiSelected={setCitiSelected} />
+        <SearchBar
+          setCitiSelected={setCitiSelected}
+          preferences={preferences}
+        />
       </Card>
     </div>
   );

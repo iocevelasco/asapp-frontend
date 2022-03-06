@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ListItemWrapper, ListLabel } from './Styles';
 import { ICity } from '../../types/interface';
 import { Typography, Checkbox } from 'antd';
@@ -5,15 +6,27 @@ const { Text } = Typography;
 
 interface IListItem {
   item: ICity;
-  onClick: (suggestion, isCheckbox) => {};
+  onClick: () => void;
   currentValue: string;
   index: number;
 }
 
-const ListItem = ({ item, onClick, currentValue }: IListItem) => {
+const ListItem = ({ isSelected, item, onClick, currentValue }: IListItem) => {
+  const [, setCheckbox] = useState(item.isSelected);
+
+  const handlerChange = (
+    event,
+    item: { event: string | number; item: ICity },
+  ) => {
+    setCheckbox(event);
+    onClick(item, event);
+  };
   return (
-    <ListItemWrapper onClick={() => onClick(item, isCheckbox)}>
-      <Checkbox checked={item.isSelected}>
+    <ListItemWrapper>
+      <Checkbox
+        checked={isSelected}
+        onClick={(e) => handlerChange(e.target.checked, item)}
+      >
         <ListLabel>
           {findMatches(item.name, currentValue)}
           <div>

@@ -1,12 +1,10 @@
-import { FC, useState, useEffect } from 'react';
-import {
-  StyledInput,
-  Container,
-  InputWrapper,
-  SuggestionList,
-  Dropdown,
-} from './Styles';
+import { FC } from 'react';
+import { StyledInput, Container, InputWrapper, SpinWrapper } from './Styles';
 import { ICity } from '../../types/interface';
+import { Spin, Typography } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+import { SuggestionsList } from './SuggestionsList';
+const { Text } = Typography;
 
 interface IAutocomplete {
   placeholder?: string;
@@ -14,70 +12,51 @@ interface IAutocomplete {
   onChange: (value: string) => void;
   onClick: (value: ICity) => void;
   suggestions: ICity[];
-  activeSuggestionIndex: ICity[];
+  loading: boolean;
 }
+
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const AutoComplete: FC<IAutocomplete> = ({
   suggestions,
   onClick,
-  activeSuggestionIndex,
+  loading,
   onChange,
   value,
   placeholder,
 }) => {
-  // useEffect(() => {
-  //   if (suggestions.length) {
-  //     setShowSuggestions(true);
-  //   }
-  // }, [suggestions]);
-
-  const onHandlerchange = (e: { target: { value: string } }) => {
-    const userInput = e.target.value;
-    onChange(userInput);
+  const EmptyMessage = () => {
+    if (!value && suggestions.length) {
+      return <Text>Not result found</Text>;
+    } else {
+      return null;
+    }
   };
-
-  const SuggestionsListComponent = () => {
-    return suggestions.length ? (
-      <Dropdown>
-        <SuggestionList>
-          {suggestions.map((suggestion, index) => {
-            let className;
-            // Flag the active suggestion with a class
-            if (index === activeSuggestionIndex) {
-              className = 'suggestion-active';
-            }
-            return (
-              <li
-                className={className}
-                key={index}
-                onClick={() => onClick(suggestion)}
-              >
-                {suggestion.country}
-                {suggestion.name}
-                {suggestion.substring}
-              </li>
-            );
-          })}
-        </SuggestionList>
-      </Dropdown>
-    ) : (
-      <div className="no-suggestions">
-        <em>No suggestions, you're on your own!</em>
-      </div>
-    );
-  };
-
+  console.log('suggestions', suggestions);
+  console.log('loading', loading);
   return (
     <Container>
       <InputWrapper>
+        <Text strong>City Selector</Text>
         <StyledInput
           type="text"
           placeholder={placeholder}
-          onChange={onHandlerchange}
+          onChange={(ev) => onChange(ev.target.value)}
           value={value}
         />
-        {value && <SuggestionsListComponent />}
+        <SpinWrapper loading={loading}>
+          <Spin indicator={antIcon} />
+        </SpinWrapper>
+        {value && (
+          <SuggestionsList
+            suggestions={suggestions}
+            onClick={onClick}
+            loading={loading}
+            value={value}
+          />
+        )}
       </InputWrapper>
+      <EmptyMessage />
     </Container>
   );
 };

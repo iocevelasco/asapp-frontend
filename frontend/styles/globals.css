@@ -1,3 +1,5 @@
+@import '~antd/dist/antd.css';
+
 :root{
   --main-border-color: #ccc;
   --primary-color:#562ce6;

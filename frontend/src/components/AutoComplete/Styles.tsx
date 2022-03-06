@@ -1,17 +1,23 @@
 import styled from 'styled-components';
 
+interface SpinWrapperProps {
+  loading: boolean;
+}
+
 export const Container = styled.div`
   position: relative;
   display: flex;
+  flex-direction: column;
+  gap: 8px;
 `;
 
 export const StyledInput = styled.input`
-  font-size: 14px;
+  font-size: 16px;
   height: 44px;
   border-radius: var(--border-radius);
   margin-bottom: 0;
   transition: all 0.4s;
-  padding: 8px 16px;
+  padding: 12px 16px;
   font-weight: 300;
   flex: 1 1 50%;
   height: 100%;
@@ -31,6 +37,8 @@ export const InputWrapper = styled.div`
   position: relative;
   display: flex;
   flex: 1;
+  flex-direction: column;
+  gap: 8px;
 `;
 
 export const SuggestionList = styled.ul`
@@ -48,17 +56,6 @@ export const SuggestionList = styled.ul`
   background-color: #fff;
   width: 100%;
   border-radius: 0 0 var(--border-radius) var(--border-radius);
-
-  li {
-    padding: 0.5rem;
-  }
-
-  li:hover {
-    background-color: var(--primary-color);
-    color: #fff;
-    cursor: pointer;
-    font-weight: 700;
-  }
 `;
 
 export const Dropdown = styled.div`
@@ -67,4 +64,42 @@ export const Dropdown = styled.div`
   bottom: 0;
   width: 100%;
   box-shadow: var(--box-shadow-base);
+`;
+
+export const SpinWrapper = styled.span<SpinWrapperProps>`
+  position: absolute;
+  display: ${({ loading }) => (loading ? 'block' : 'none')};
+  z-index: 10;
+  bottom: 4px;
+  right: 8px;
+  box-shadow: var(--box-shadow-base);
+`;
+
+export const ListItemWrapper = styled.li`
+  display: flex !important;
+  gap: 8px;
+  flex-direction: column;
+  border-bottom: 1px solid var(--main-border-color);
+  span: first-child;
+  transition: 0.5s;
+  display: block;
+  padding: 8px 16px;
+  :hover {
+    background-color: #f2f2f2;
+    cursor: pointer;
+  }
+`;
+
+export const ListLabel = styled.div`
+  display: flex !important;
+  gap: 8px;
+  flex-direction: column;
+  span: first-child;
+  transition: 0.5s;
+  display: block;
+  padding: 0 8px;
+  div {
+    display: flex;
+    gap: 8px;
+  }
 `;

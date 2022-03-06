@@ -3,4 +3,5 @@ export interface ICity {
   name: string;
   country: string;
   subcountry?: string;
+  isSelected?:boolean;
 }

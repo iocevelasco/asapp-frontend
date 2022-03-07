@@ -6,6 +6,23 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
+  z-index: 10;
+}
+
+.bg{
+  background-image: url('https://media.istockphoto.com/vectors/doodle-cartoon-kawaii-style-alien-space-ufo-seamless-vector-pattern-vector-id638455006?k=20&m=638455006&s=170667a&w=0&h=wwjhq5TxJbOkS3vwPH9xHWhbc3DIeQ0Cw9PuOcNzvuM=');
+  background-position: center;
+  background-repeat: repeat;
+  background-size: cover;
+  background-size: 300px;
+  opacity: 0.1;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  z-index: -1;
 }
 
 .header{
@@ -16,3 +33,4 @@
   align-items: center;
   gap: 10px;
 }
+

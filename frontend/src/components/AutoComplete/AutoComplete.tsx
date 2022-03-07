@@ -13,6 +13,7 @@ interface IAutocomplete {
   onClick: (value: ICity) => void;
   suggestions: ICity[];
   loading: boolean;
+  preferences: number[];
 }
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;

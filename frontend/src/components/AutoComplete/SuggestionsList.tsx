@@ -6,7 +6,7 @@ import { ListItem } from './ListItem';
 interface ISuggestionsList {
   suggestions: ICity[];
   preferences: number[];
-  onClick: () => void;
+  onClick: (ICity: ICity, value: string) => void;
   value: string;
 }
 
@@ -22,7 +22,9 @@ const SuggestionsList: FC<ISuggestionsList> = ({
     <Dropdown>
       <SuggestionList>
         {suggestions.map((suggestion, index) => {
-          const isSelected = preferences.find((e) => e == suggestion.geonameid);
+          const isSelected = preferences.find((e) => e == suggestion.geonameid)
+            ? true
+            : false;
           return (
             <ListItem
               onClick={onClick}

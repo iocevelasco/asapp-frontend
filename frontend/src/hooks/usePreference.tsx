@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { fetchPreferencesCities } from '../../services/cities';
-import { ICity } from '../src/types/interface';
-export const usePreferences = (citiSelected) => {
+import { ICity } from '../types/interface';
+export const usePreferences = (citiSelected: ICity) => {
   const [preferences, setPreferences] = useState([]);
 
   useEffect(() => {

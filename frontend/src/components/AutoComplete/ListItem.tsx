@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, MouseEventHandler } from 'react';
 import { ListItemWrapper, ListLabel } from './Styles';
 import { ICity } from '../../types/interface';
 import { Typography, Checkbox } from 'antd';
@@ -6,26 +6,25 @@ const { Text } = Typography;
 
 interface IListItem {
   item: ICity;
-  onClick: () => void;
+  onClick: (ICity: ICity, value: string) => void;
   currentValue: string;
   index: number;
+  isSelected: boolean;
 }
 
 const ListItem = ({ isSelected, item, onClick, currentValue }: IListItem) => {
   const [, setCheckbox] = useState(item.isSelected);
 
-  const handlerChange = (
-    event,
-    item: { event: string | number; item: ICity },
-  ) => {
-    setCheckbox(event);
-    onClick(item, event);
+  const handlerChange = (event: any, item: ICity) => {
+    const newValue = event.target.checked;
+    setCheckbox(newValue);
+    onClick(item, newValue);
   };
   return (
     <ListItemWrapper>
       <Checkbox
         checked={isSelected}
-        onClick={(e) => handlerChange(e.target.checked, item)}
+        onClick={(e: any) => handlerChange(e, item)}
       >
         <ListLabel>
           {findMatches(item.name, currentValue)}
@@ -38,10 +37,7 @@ const ListItem = ({ isSelected, item, onClick, currentValue }: IListItem) => {
   );
 };
 
-const findMatches = (
-  text,
-  currentValue: { text: string; currentValue: string },
-) => {
+const findMatches = (text: string, currentValue: string) => {
   const index = text.indexOf(currentValue);
   const initialPart = text.substring(0, index);
   const middlePart = text.substring(index, currentValue.length);

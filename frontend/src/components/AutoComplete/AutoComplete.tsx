@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { StyledInput, Container, InputWrapper, SpinWrapper } from './Styles';
 import { ICity } from '../../types/interface';
 import { Spin, Typography } from 'antd';
@@ -10,7 +10,7 @@ interface IAutocomplete {
   placeholder?: string;
   value: string;
   onChange: (value: string) => void;
-  onClick: (value: ICity) => void;
+  onClick: (itemSelected: ICity, value: string) => void;
   suggestions: ICity[];
   loading: boolean;
   preferences: number[];
@@ -27,13 +27,13 @@ const AutoComplete: FC<IAutocomplete> = ({
   placeholder,
   preferences,
 }) => {
-  const EmptyMessage = () => {
-    if (!value && suggestions.length) {
-      return <Text>Not result found</Text>;
+  const emptyMessage = useMemo(() => {
+    if (value.length) {
+      return !suggestions.length ? <Text>Not result found</Text> : null;
     } else {
       return null;
     }
-  };
+  }, [suggestions.length]);
 
   return (
     <Container>
@@ -57,7 +57,7 @@ const AutoComplete: FC<IAutocomplete> = ({
           />
         )}
       </InputWrapper>
-      <EmptyMessage />
+      {emptyMessage}
     </Container>
   );
 };

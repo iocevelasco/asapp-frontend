@@ -14,12 +14,13 @@ const SearchBar: FC<ISearchType> = ({ setCitiSelected, preferences }) => {
   const [query, setQuery] = useState<string>('');
   const [suggestions, setSuggestion] = useState<ICity[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [searchQuery, setSearchQuery] = useState({});
+
+  const [, setSearchQuery] = useState<any>({});
   const onChange = (value: string) => {
     setQuery(value);
     const search = lodash.debounce(sendQuery, 500);
 
-    setSearchQuery((prevSearch) => {
+    setSearchQuery((prevSearch: { cancel: () => void }) => {
       if (prevSearch.cancel) {
         prevSearch.cancel();
       }
@@ -27,7 +28,7 @@ const SearchBar: FC<ISearchType> = ({ setCitiSelected, preferences }) => {
     });
 
     if (search) {
-      search(value);
+      search();
     } else {
       setSuggestion([]);
     }
@@ -45,13 +46,15 @@ const SearchBar: FC<ISearchType> = ({ setCitiSelected, preferences }) => {
     }
   };
 
-  const onClick = async (itemSelected, checked: ICity) => {
-    setCitiSelected(itemSelected);
+  const onClick = async (itemSelected: ICity, checked: boolean) => {
     setQuery(itemSelected.name);
     await addToPreferenceUser(itemSelected.geonameid, checked);
+    setCitiSelected(itemSelected);
 
     const updatesuggestion = suggestions.map((suggestion) => {
-      const isSelected = preferences.find((e) => e == itemSelected.geonameid);
+      const isSelected = preferences.find((e) => e == itemSelected.geonameid)
+        ? true
+        : false;
       return {
         ...suggestion,
         isSelected,
@@ -65,13 +68,13 @@ const SearchBar: FC<ISearchType> = ({ setCitiSelected, preferences }) => {
     <div className={classes.container}>
       <div className={classes.input}>
         <AutoComplete
-          onClick={onClick}
+          placeholder="Select the city"
+          preferences={preferences}
           suggestions={suggestions}
           onChange={onChange}
+          onClick={onClick}
           value={query}
           loading={loading}
-          placeholder="Select your city"
-          preferences={preferences}
         />
       </div>
     </div>

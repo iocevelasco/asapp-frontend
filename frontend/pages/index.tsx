@@ -13,7 +13,7 @@ import { usePreferences } from '../src/hooks/usePreference';
 
 const Home: NextPage = () => {
   const [citiSelected, setCitiSelected] = useState<ICity>({
-    geonameid: null,
+    geonameid: 0,
     name: '',
     country: '',
     subcountry: '',
@@ -33,26 +33,28 @@ const Home: NextPage = () => {
           width={80}
           height={80}
         />
-        <Title level={4}>Hi Human! We'll to invide your world</Title>
+        <Title level={4}>Hi Human! We'll invade your world</Title>
         <Title level={5}>Be kind and suggesting a city!</Title>
       </div>
       <Card>
-        {citiSelected.geonameid && (
-          <div className={classes.header}>
-            <Text type="secondary">Select your favorite city</Text>
-            <div>
-              <Space>
-                <Text>
-                  City:<Text strong>{citiSelected.name}</Text>
-                </Text>
-                -
-                <Text>
-                  Country: <Text strong>{citiSelected.country}</Text>
-                </Text>
-              </Space>
-            </div>
-          </div>
-        )}
+        <div className={classes.option__selected}>
+          <Text strong>Select your favorite city</Text>
+          {!!citiSelected.geonameid && (
+            <>
+              <div>
+                <Space>
+                  <Text>
+                    City:<Text strong>{citiSelected.name}</Text>
+                  </Text>
+                  -
+                  <Text>
+                    Country: <Text strong>{citiSelected.country}</Text>
+                  </Text>
+                </Space>
+              </div>
+            </>
+          )}
+        </div>
         <SearchBar
           setCitiSelected={setCitiSelected}
           preferences={preferences}

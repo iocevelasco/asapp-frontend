@@ -4,7 +4,7 @@ const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const fetchCities = async (
   query: string,
-): Promise<Record<string, number | string>> => {
+): Promise<Record<string, any>> => {
   try {
     const { data } = await axios.get(
       `${baseURL}cities?filter=${query}&limit=20`,
@@ -17,9 +17,9 @@ export const fetchCities = async (
 };
 
 export const addToPreferenceUser = async (
-  cityId,
-  value: { cityId: number; value: boolean },
-): Promise<Record<string, number | string>> => {
+  cityId: number,
+  value: boolean,
+): Promise<Record<string, any>> => {
   try {
     const payload = { [cityId]: value };
     const { data } = await axios.patch(`${baseURL}preferences/cities`, {
@@ -32,7 +32,9 @@ export const addToPreferenceUser = async (
   }
 };
 
-export const fetchPreferencesCities = async () => {
+export const fetchPreferencesCities = async (): Promise<
+  Record<string, any>
+> => {
   try {
     const { data } = await axios.get(`${baseURL}preferences/cities`);
     return { result: data };

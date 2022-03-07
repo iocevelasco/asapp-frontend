@@ -1,7 +1,7 @@
 export interface ICity {
-  geonameid: number|null;
+  geonameid: number;
   name: string;
   country: string;
-  subcountry?: string;
+  subcountry: string;
   isSelected?:boolean;
 }

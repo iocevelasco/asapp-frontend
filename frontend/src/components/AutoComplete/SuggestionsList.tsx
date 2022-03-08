@@ -16,7 +16,6 @@ const SuggestionsList: FC<ISuggestionsList> = ({
   value,
   preferences,
 }) => {
-  console.log('suggestions', suggestions);
   if (!suggestions.length) return null;
 
   return (

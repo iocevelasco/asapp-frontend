@@ -20,6 +20,7 @@ const ListItem = ({ isSelected, item, onClick, currentValue }: IListItem) => {
     setCheckbox(newValue);
     onClick(item, newValue);
   };
+
   return (
     <ListItemWrapper>
       <Checkbox

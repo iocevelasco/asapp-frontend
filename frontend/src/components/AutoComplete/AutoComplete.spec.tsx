@@ -8,6 +8,7 @@ import {
   screen,
   RenderResult,
   getAllByText,
+  getByText,
 } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
@@ -57,43 +58,35 @@ describe('ListItems', () => {
 });
 
 describe('SuggestionsList', () => {
-  let component: RenderResult<
-    typeof import('@testing-library/dom/types/queries'),
-    HTMLElement
-  >;
-  beforeEach(() => {
-    component = render(
+  it('Should show suggesting list', () => {
+    const handleClick = jest.fn();
+    const { getByTestId } = render(
       <SuggestionsList
         suggestions={suggestions}
         preferences={preferences}
-        onClick={() => {}}
+        onClick={handleClick}
         value="Bahía Blanca"
       />,
     );
+    expect(getByTestId('list-container'));
   });
 
-  it('Should show suggesting list', () => {
-    const element = screen.getByTestId('list-container');
-    expect(element);
-  });
-
-  it('Should quantity list items', () => {
-    const listElement = component.getAllByText('Buenos Aires');
-    expect(listElement.length == 2);
-  });
-
-  it('Should quantity list items', () => {
-    const listElement = component.getAllByText('Buenos Aires');
+  it('Check quantity list items', () => {
+    const handleClick = jest.fn();
+    const { getAllByText } = render(
+      <SuggestionsList
+        suggestions={suggestions}
+        preferences={preferences}
+        onClick={handleClick}
+        value="Bahía Blanca"
+      />,
+    );
+    const listElement = getAllByText('Buenos Aires');
     expect(listElement.length == 2);
   });
 });
 
 describe('AutoComplete', () => {
-  let component: RenderResult<
-    typeof import('@testing-library/dom/types/queries'),
-    HTMLElement
-  >;
-
   it('Should render value', async () => {
     const handleClick = jest.fn();
     const onChange = jest.fn();
@@ -125,5 +118,49 @@ describe('AutoComplete', () => {
     expect(input.value).toBe('Buenos Aires');
     const listElement = wrapper.getAllByText('Buenos Aires');
     expect(listElement.length == 2);
+  });
+
+  it('Should render empty state', async () => {
+    const handleClick = jest.fn();
+    const onChange = jest.fn();
+
+    const wrapper: RenderResult<
+      typeof import('@testing-library/dom/types/queries'),
+      HTMLElement
+    > = render(
+      <AutoComplete
+        placeholder="Select the city"
+        preferences={[]}
+        suggestions={[]}
+        onChange={onChange}
+        onClick={handleClick}
+        value="Buenos Aires"
+        loading={false}
+      />,
+    );
+
+    expect(wrapper.getByText('Not result found'));
+  });
+
+  it('Should show loading', async () => {
+    const handleClick = jest.fn();
+    const onChange = jest.fn();
+
+    const wrapper: RenderResult<
+      typeof import('@testing-library/dom/types/queries'),
+      HTMLElement
+    > = render(
+      <AutoComplete
+        placeholder="Select the city"
+        preferences={[]}
+        suggestions={[]}
+        onChange={onChange}
+        onClick={handleClick}
+        value="Buenos Aires"
+        loading={true}
+      />,
+    );
+
+    expect(wrapper.getByTestId('loading'));
   });
 });

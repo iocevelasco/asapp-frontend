@@ -10,7 +10,7 @@ interface IAutocomplete {
   placeholder?: string;
   value: string;
   onChange: (value: string) => void;
-  onClick: (itemSelected: ICity, value: string) => void;
+  onClick: (itemSelected: ICity, value: string) => Promise<void>;
   suggestions: ICity[];
   loading: boolean;
   preferences: number[];

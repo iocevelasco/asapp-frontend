@@ -46,7 +46,10 @@ const SearchBar: FC<ISearchType> = ({ setCitiSelected, preferences }) => {
     }
   };
 
-  const onClick = async (itemSelected: ICity, checked: boolean) => {
+  const onClick = async (
+    itemSelected: ICity,
+    checked: boolean,
+  ): Promise<void> => {
     setQuery(itemSelected.name);
     await addToPreferenceUser(itemSelected.geonameid, checked);
     setCitiSelected(itemSelected);

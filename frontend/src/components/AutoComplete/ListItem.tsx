@@ -37,7 +37,7 @@ const ListItem = ({ isSelected, item, onClick, currentValue }: IListItem) => {
   );
 };
 
-const findMatches = (text: string, currentValue: string) => {
+export const findMatches = (text: string, currentValue: string) => {
   const index = text.indexOf(currentValue);
   const initialPart = text.substring(0, index);
   const middlePart = text.substring(index, currentValue.length);

@@ -16,11 +16,12 @@ const SuggestionsList: FC<ISuggestionsList> = ({
   value,
   preferences,
 }) => {
+  console.log('suggestions', suggestions);
   if (!suggestions.length) return null;
 
   return (
     <Dropdown>
-      <SuggestionList>
+      <SuggestionList data-testid={'list-container'}>
         {suggestions.map((suggestion, index) => {
           const isSelected = preferences.find((e) => e == suggestion.geonameid)
             ? true
@@ -28,6 +29,7 @@ const SuggestionsList: FC<ISuggestionsList> = ({
           return (
             <ListItem
               onClick={onClick}
+              data-testid={`${index}-list-item`}
               key={index}
               index={index}
               item={suggestion}

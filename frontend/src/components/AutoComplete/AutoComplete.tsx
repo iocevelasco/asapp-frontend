@@ -40,12 +40,14 @@ const AutoComplete: FC<IAutocomplete> = ({
       <InputWrapper>
         <Text strong>City Selector</Text>
         <StyledInput
+          data-testid="autosuggest-input"
           type="text"
+          id="autosuggest-input"
           placeholder={placeholder}
           onChange={(ev) => onChange(ev.target.value)}
           value={value}
         />
-        <SpinWrapper loading={loading}>
+        <SpinWrapper data-testid="loading" loading={loading}>
           <Spin indicator={antIcon} />
         </SpinWrapper>
         {value && (

@@ -1,0 +1,21 @@
+{
+  "name": "challenge-workspace",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm workspaces run build",
+    "serve": "wsrun --parallel serve",
+    "start-dev": "concurrently \"wsrun --parallel dev\""
+  },
+  "workspaces": [
+    "api",
+    "frontend"
+  ],
+  "devDependencies": {
+    "concurrently": "^5.1.0",
+    "wsrun": "^5.2.0"
+  },
+  "author": "ioce-velasco",
+  "license": "ISC"
+}

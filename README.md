@@ -21,7 +21,7 @@ Install dependencies
   cd frontend npm install 
 ```
 
-Start storybook
+Start Pr
 
 ```bash
   npm run start-dev in the root to run in parallel

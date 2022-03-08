@@ -1,5 +1,33 @@
 # ASAPP Front End Challenge
 
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://github.com/trafilea/afrodita-components.git
+```
+
+Go to the project directory
+
+```bash
+  cd asapp-frontend
+```
+
+Install dependencies
+
+```bash
+  cd api npm install 
+  cd frontend npm install 
+```
+
+Start storybook
+
+```bash
+  npm run start-dev in the root
+```
+
+
 In these files, you'll find the API needed to work on the ASAPP Front End
 Challenge. You should have an email with the challenge details.
 
